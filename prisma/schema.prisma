@@ -17,7 +17,7 @@ datasource db {
 
 model IngredientList {
   id          Int      @id @default(autoincrement())
-  ingredients String   // raw ingredient text (comma-separated)
+  ingredients String[]   // raw ingredient text (comma-separated)
   recipes     Json?    // store AI response (JSON)
   createdAt   DateTime @default(now())
 
