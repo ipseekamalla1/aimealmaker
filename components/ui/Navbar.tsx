@@ -15,7 +15,7 @@ export default function Navbar() {
       <ul className="flex gap-8 text-sm font-medium">
         <li><Link href="/" className="hover:text-white transition">Home</Link></li>
         <li><Link href="/recipes" className="hover:text-white transition">Recipes</Link></li>
-        <li><Link href="/ai-meal" className="hover:text-white transition">AI Meal Maker</Link></li>
+        <li><Link href="/mealmaker" className="hover:text-white transition">AI Meal Maker</Link></li>
         <li><Link href="/about" className="hover:text-white transition">About</Link></li>
         <li><Link href="/contact" className="hover:text-white transition">Contact</Link></li>
       </ul>
