@@ -1,14 +1,35 @@
-import Navbar from "@/components/ui/Navbar";
-import Image from "next/image";
-import Link from "next/link";
+import Image from "next/image"
+import Navbar from "@/components/ui/Navbar"
 
 export default function Home() {
   return (
-    <>
+    <div className="font-sans min-h-screen bg-black text-white">
       <Navbar />
-      <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 pt-24">
-        {/* Your main page content */}
-      </div>
-    </>
-  );
+
+      {/* Hero Section */}
+      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 flex">
+          <div className="w-1/2 bg-gray-700/80"></div>
+          <div className="w-1/2 bg-yellow-600/70"></div>
+        </div>
+
+        <Image
+          src="/hero-img.jpg"
+          alt="Meal Maker background"
+          fill
+          className="object-cover opacity-30"
+        />
+
+        <div className="relative z-10 text-center">
+          <h1 className="text-5xl font-bold mb-4 text-yellow-400">Create. Cook. Enjoy.</h1>
+          <p className="text-lg text-gray-200 max-w-xl mx-auto mb-6">
+            Discover personalized recipes made by AI — just for your ingredients.
+          </p>
+          <button className="bg-emerald-900 font-semibold px-6 py-3 rounded hover:bg-yellow-400 transition">
+            Let’s Cook!
+          </button>
+        </div>
+      </section>
+    </div>
+  )
 }
