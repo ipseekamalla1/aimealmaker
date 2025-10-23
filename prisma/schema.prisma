@@ -23,3 +23,13 @@ model IngredientList {
 
    @@map("IngredientList")
 }
+model User {
+  id        String   @id @default(cuid())
+  fname     String?
+  lname     String?
+  username  String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
