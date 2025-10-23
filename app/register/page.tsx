@@ -20,20 +20,26 @@ export default function RegisterPage() {
     setLoading(true);
     setMessage("");
 
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    const data = await res.json();
-    setLoading(false);
+      const data = await res.json();
+      setLoading(false);
 
-    if (res.ok) {
-      setMessage("Registration successful! Redirecting to login...");
-      setTimeout(() => router.push("/login"), 1500); // redirect to login page
-    } else {
-      setMessage(data.error || "Something went wrong");
+      if (res.ok) {
+        setMessage("✅ Registration successful! Redirecting to login...");
+        setTimeout(() => router.push("/login"), 1500);
+      } else {
+        // Display backend validation message
+        setMessage(`⚠️ ${data.error || "Something went wrong."}`);
+      }
+    } catch (error) {
+      setLoading(false);
+      setMessage("❌ Server error. Please try again later.");
     }
   };
 
@@ -42,7 +48,7 @@ export default function RegisterPage() {
       {/* Left side - Photo & Caption */}
       <div className="relative w-1/2 hidden lg:block">
         <Image
-          src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80"
+          src="https://images.unsplash.com/photo-1528715471579-d1bcf0ba5e83?auto=format&fit=crop&w=1600&q=80"
           alt="Healthy meal"
           fill
           priority
@@ -53,8 +59,7 @@ export default function RegisterPage() {
             Start Your Flavor Journey 🍲
           </h2>
           <p className="text-lg text-emerald-100 max-w-md">
-            Join MealMaker today and explore recipes crafted from your favorite
-            ingredients.
+            Join MealMaker today and discover personalized recipes made for you.
           </p>
         </div>
       </div>
@@ -79,9 +84,9 @@ export default function RegisterPage() {
               onChange={(e) =>
                 setForm({ ...form, [key]: e.target.value })
               }
-              required
             />
           ))}
+
           <button
             type="submit"
             disabled={loading}
@@ -96,7 +101,17 @@ export default function RegisterPage() {
         </form>
 
         {message && (
-          <p className="mt-4 text-amber-300 animate-pulse">{message}</p>
+          <p
+            className={`mt-4 ${
+              message.startsWith("✅")
+                ? "text-green-400"
+                : message.startsWith("⚠️")
+                ? "text-amber-400"
+                : "text-red-400"
+            } animate-pulse`}
+          >
+            {message}
+          </p>
         )}
 
         <p className="mt-6 text-sm text-gray-400">
