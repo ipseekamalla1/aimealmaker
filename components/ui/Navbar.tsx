@@ -1,10 +1,14 @@
 "use client";
 import Link from "next/link";
 import { User } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
 
-export default function Navbar({ user }: { user: any }) {
+export default function Navbar() {
+  const { data: session } = useSession();
+
   return (
     <nav className="flex justify-between items-center px-10 py-6 bg-black text-yellow-400 tracking-wide uppercase">
+      {/* Logo */}
       <div className="text-center">
         <h1 className="text-2xl font-bold">
           Meal<span className="text-white">Maker</span>
@@ -12,6 +16,7 @@ export default function Navbar({ user }: { user: any }) {
         <p className="text-xs text-gray-400">Since 2025</p>
       </div>
 
+      {/* Links */}
       <ul className="flex gap-8 text-sm font-medium">
         <li><Link href="/">Home</Link></li>
         <li><Link href="/recipes">Recipes</Link></li>
@@ -20,16 +25,19 @@ export default function Navbar({ user }: { user: any }) {
         <li><Link href="/contact">Contact</Link></li>
       </ul>
 
+      {/* Right Side - Login / Logout */}
       <div className="flex items-center gap-4">
-        {user ? (
+        {session?.user ? (
           <>
-            <span className="text-white">{user.email}</span>
-            <Link
-              href="/logout"
+            <span className="text-white">
+              Hi, {session.user.name?.split(" ")[0] || "User"}
+            </span>
+            <button
+              onClick={() => signOut({ callbackUrl: "/login" })}
               className="px-4 py-2 bg-red-700 rounded-md hover:bg-red-500 text-white"
             >
               Logout
-            </Link>
+            </button>
           </>
         ) : (
           <Link

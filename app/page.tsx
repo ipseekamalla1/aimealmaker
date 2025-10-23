@@ -1,10 +1,8 @@
 import Image from "next/image"
-import Navbar from "@/components/ui/Navbar"
 
 export default function Home() {
   return (
     <div className="font-sans min-h-screen bg-black text-white">
-      <Navbar />
 
       {/* Hero Section */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">

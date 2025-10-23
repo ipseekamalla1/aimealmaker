@@ -1,88 +1,109 @@
-'use client';
-import { useState } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+"use client";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import Image from "next/image";
 
 export default function LoginPage() {
-  const [form, setForm] = useState({ email: '', password: '' });
-  const [message, setMessage] = useState('');
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+    setError("");
+    setLoading(true);
+
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: form.email,
+      password: form.password,
     });
 
-    const data = await res.json();
-    if (res.ok) {
-      setMessage('Login successful! Redirecting...');
-      setTimeout(() => router.push('/'), 1500);
+    setLoading(false);
+
+    if (res?.error) {
+      setError(res.error);
     } else {
-      setMessage(data.error || 'Login failed');
+      router.push("/"); // redirect to home
     }
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-black text-white">
       {/* Left side - Login Form */}
-      <div className="flex flex-col justify-center items-center w-full lg:w-1/2 bg-[#0f0f0f] text-white px-10">
-        <h1 className="text-4xl font-bold mb-6">Welcome Back to Meal Maker!</h1>
-        <p className="text-gray-400 mb-6">
-          Sign in and continue planning delicious meals
-        </p>
+      <div className="flex flex-col justify-center items-center w-full lg:w-1/2 px-10 py-12">
+        <h1 className="text-3xl font-bold mb-6 text-amber-400">
+          Welcome Back 
+        </h1>
 
-        <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-sm space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col w-full max-w-md space-y-4 bg-emerald-950/50 border border-emerald-700 rounded-lg p-8 shadow-lg"
+        >
           <input
             type="email"
             placeholder="Email"
-            className="p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="p-3 rounded bg-gray-800 border border-gray-600 focus:ring-2 focus:ring-amber-400 focus:outline-none"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             required
           />
+
           <input
             type="password"
             placeholder="Password"
-            className="p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="p-3 rounded bg-gray-800 border border-gray-600 focus:ring-2 focus:ring-amber-400 focus:outline-none"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             required
           />
+
           <button
             type="submit"
-            className="bg-orange-500 hover:bg-orange-600 text-white p-3 rounded font-semibold transition"
+            disabled={loading}
+            className={`p-3 rounded font-semibold transition-all duration-300 ${
+              loading
+                ? "bg-emerald-700 text-gray-300 cursor-not-allowed"
+                : "bg-amber-400 text-black hover:bg-amber-300"
+            }`}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        {message && <p className="mt-4 text-sm text-gray-300">{message}</p>}
+        {error && (
+          <p className="mt-4 text-red-400 animate-pulse">{error}</p>
+        )}
 
-        <p className="mt-6 text-gray-400 text-sm">
-          Don’t have an account?{' '}
-          <a href="/register" className="text-orange-400 hover:underline">
-            Register here
-          </a>
+        <p className="mt-6 text-sm text-gray-400">
+          Don’t have an account?{" "}
+          <span
+            onClick={() => router.push("/register")}
+            className="text-amber-400 cursor-pointer hover:underline"
+          >
+            Register
+          </span>
         </p>
       </div>
 
-      {/* Right side - Food Photo & Caption */}
+      {/* Right side - Image & Caption */}
       <div className="relative w-1/2 hidden lg:block">
         <Image
-          src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80"
-          alt="Meal Maker Background"
+          src="https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=1600&q=80
+"
+          alt="Meal inspiration"
           fill
-          className="object-cover"
+          priority
+          className="object-cover opacity-80"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center p-10">
-          <h2 className="text-3xl font-bold text-white mb-4 drop-shadow-lg">
-            Plan, Cook, and Savor Every Bite 🍲
+        <div className="absolute inset-0 bg-emerald-950/60 flex flex-col items-center justify-center text-center px-8">
+          <h2 className="text-4xl font-bold text-amber-300 mb-4">
+            Discover Delicious Simplicity 🍴
           </h2>
-          <p className="text-gray-200 text-lg max-w-md">
-            Log in to create meal plans, explore recipes, and make every meal meaningful.
+          <p className="text-lg text-emerald-100 max-w-md">
+            Plan your perfect meal effortlessly with MealMaker — log in to continue your culinary journey.
           </p>
         </div>
       </div>

@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Navbar from "@/components/ui/Navbar"
 import { motion } from "framer-motion"
 
 export default function HomePage() {
@@ -84,7 +83,6 @@ export default function HomePage() {
 
   return (
     <>
-      <Navbar />
 
       {/* 🌄 HERO SECTION */}
       <section
